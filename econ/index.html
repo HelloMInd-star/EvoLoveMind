@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -6,9 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EvolveMind · 经济模式</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
         body {
-            font-family: -apple-system, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
             background: #f1f5f9;
             min-height: 100vh;
             display: flex;
@@ -22,7 +25,7 @@
             background: white;
             border-radius: 32px;
             padding: 40px 36px 36px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.06);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.06);
         }
         .header {
             display: flex;
@@ -37,8 +40,10 @@
             font-weight: 700;
             color: #0f172a;
         }
-        .header h2 span { color: #4f46e5; }
-        .header a {
+        .header h2 span {
+            color: #4f46e5;
+        }
+        .header .nav-links a {
             color: #64748b;
             text-decoration: none;
             font-size: 14px;
@@ -46,8 +51,9 @@
             padding: 6px 16px;
             border-radius: 20px;
             transition: 0.2s;
+            margin-left: 8px;
         }
-        .header a:hover {
+        .header .nav-links a:hover {
             background: #f1f5f9;
             border-color: #4f46e5;
             color: #4f46e5;
@@ -83,7 +89,10 @@
             display: flex;
             justify-content: space-between;
         }
-        .control-group label span { color: #4f46e5; font-weight: 600; }
+        .control-group label span {
+            color: #4f46e5;
+            font-weight: 600;
+        }
         input[type="range"] {
             width: 100%;
             accent-color: #4f46e5;
@@ -116,18 +125,24 @@
             display: flex;
             flex-direction: column;
         }
-        .status-item .label { color: #94a3b8; font-size: 12px; }
+        .status-item .label {
+            color: #94a3b8;
+            font-size: 12px;
+        }
         .status-item .value {
             font-weight: 600;
             color: #0f172a;
             font-size: 16px;
             margin-top: 2px;
         }
-        .status-item .value.highlight { color: #4f46e5; }
+        .status-item .value.highlight {
+            color: #4f46e5;
+        }
         .actions {
             display: flex;
             gap: 12px;
             flex-wrap: wrap;
+            align-items: center;
         }
         .actions button {
             padding: 8px 24px;
@@ -144,32 +159,74 @@
             background: #4f46e5;
             color: white;
         }
-        .actions button.primary:hover { background: #4338ca; }
-        .actions button:hover { background: #e2e8f0; }
+        .actions button.primary:hover {
+            background: #4338ca;
+        }
+        .actions button:hover {
+            background: #e2e8f0;
+        }
+        .actions .theory-link {
+            margin-left: auto;
+            background: #eef2ff;
+            color: #4f46e5;
+            padding: 8px 20px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            border: 1px solid #4f46e5;
+            transition: 0.2s;
+        }
+        .actions .theory-link:hover {
+            background: #4f46e5;
+            color: white;
+        }
         @media (max-width: 700px) {
-            .controls { grid-template-columns: 1fr 1fr; }
-            .status-panel { grid-template-columns: 1fr 1fr; }
+            .controls {
+                grid-template-columns: 1fr 1fr;
+            }
+            .status-panel {
+                grid-template-columns: 1fr 1fr;
+            }
         }
         @media (max-width: 480px) {
-            .container { padding: 24px 16px 20px; }
-            .controls { grid-template-columns: 1fr; }
-            .status-panel { grid-template-columns: 1fr; }
-            .header h2 { font-size: 20px; }
+            .container {
+                padding: 24px 16px 20px;
+            }
+            .controls {
+                grid-template-columns: 1fr;
+            }
+            .status-panel {
+                grid-template-columns: 1fr;
+            }
+            .header h2 {
+                font-size: 20px;
+            }
+            .actions .theory-link {
+                margin-left: 0;
+                width: 100%;
+                text-align: center;
+            }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
+    <!-- 头部导航 -->
     <div class="header">
         <h2>📈 经济模式 · <span>供给需求</span></h2>
-        <a href="../index.html">← 返回首页</a>
+        <div class="nav-links">
+            <a href="../index.html">🏠 首页</a>
+        </div>
     </div>
 
+    <!-- 画布 -->
     <div class="canvas-wrapper">
         <canvas id="canvas" width="800" height="400"></canvas>
     </div>
 
+    <!-- 控制区 -->
     <div class="controls">
         <div class="control-group">
             <label>弹性（波动幅度） <span id="elasticValue">1.0</span></label>
@@ -185,19 +242,31 @@
         </div>
     </div>
 
+    <!-- 状态面板 -->
     <div class="status-panel">
-        <div class="status-item"><span class="label">当前角度</span><span class="value" id="angleDisplay">0°</span></div>
-        <div class="status-item"><span class="label">需求指数</span><span class="value highlight" id="demandDisplay">50%</span></div>
-        <div class="status-item"><span class="label">供给指数</span><span class="value highlight" id="supplyDisplay">50%</span></div>
-        <div class="status-item"><span class="label">市场状态</span><span class="value" id="stateDisplay">⚖️ 均衡</span></div>
+        <div class="status-item">
+            <span class="label">当前角度</span>
+            <span class="value" id="angleDisplay">0°</span>
+        </div>
+        <div class="status-item">
+            <span class="label">需求指数</span>
+            <span class="value highlight" id="demandDisplay">50%</span>
+        </div>
+        <div class="status-item">
+            <span class="label">供给指数</span>
+            <span class="value highlight" id="supplyDisplay">50%</span>
+        </div>
+        <div class="status-item">
+            <span class="label">市场状态</span>
+            <span class="value" id="stateDisplay">⚖️ 均衡</span>
+        </div>
     </div>
 
+    <!-- 操作区 -->
     <div class="actions">
         <button class="primary" id="toggleBtn">⏸️ 暂停</button>
         <button id="resetBtn">🔄 重置</button>
-        <a href="theory.html" style="text-decoration:none; margin-left:auto;">
-            <button style="background:#eef2ff; color:#4f46e5; border:1px solid #4f46e5;">📖 查看理论分析</button>
-        </a>
+        <a href="theory.html" class="theory-link">📖 查看理论分析</a>
     </div>
 </div>
 
@@ -231,8 +300,10 @@
         }
 
         function draw() {
-            const w = canvas.width, h = canvas.height;
-            const cx = w / 2, cy = h / 2;
+            const w = canvas.width,
+                h = canvas.height;
+            const cx = w / 2,
+                cy = h / 2;
             const params = getParams();
             const elastic = params.elastic;
             const policy = params.policy;
@@ -256,17 +327,30 @@
             ctx.strokeStyle = '#f1f5f9';
             ctx.lineWidth = 1;
             for (let i = 0; i <= 10; i++) {
-                const x = (i / 10) * w, y = (i / 10) * h;
-                ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, h); ctx.stroke();
-                ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
+                const x = (i / 10) * w,
+                    y = (i / 10) * h;
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, h);
+                ctx.stroke();
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(w, y);
+                ctx.stroke();
             }
 
             // 基准线
             ctx.strokeStyle = '#e2e8f0';
             ctx.lineWidth = 1.5;
             ctx.setLineDash([6, 6]);
-            ctx.beginPath(); ctx.moveTo(0, cy + offsetY); ctx.lineTo(w, cy + offsetY); ctx.stroke();
-            ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, h); ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(0, cy + offsetY);
+            ctx.lineTo(w, cy + offsetY);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(cx, 0);
+            ctx.lineTo(cx, h);
+            ctx.stroke();
             ctx.setLineDash([]);
 
             // 圆
@@ -282,11 +366,14 @@
             ctx.stroke();
 
             // 需求点
-            const demandX = cx, demandY = cy + demand;
+            const demandX = cx,
+                demandY = cy + demand;
             ctx.fillStyle = '#4f46e5';
             ctx.shadowColor = 'rgba(79,70,229,0.2)';
             ctx.shadowBlur = 12;
-            ctx.beginPath(); ctx.arc(demandX, demandY, 10, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath();
+            ctx.arc(demandX, demandY, 10, 0, Math.PI * 2);
+            ctx.fill();
             ctx.shadowBlur = 0;
             ctx.fillStyle = '#ffffff';
             ctx.font = 'bold 12px sans-serif';
@@ -295,11 +382,14 @@
             ctx.fillText('需求', demandX, demandY - 14);
 
             // 供给点
-            const supplyX = cx + supply, supplyY = cy + offsetY;
+            const supplyX = cx + supply,
+                supplyY = cy + offsetY;
             ctx.fillStyle = '#0f172a';
             ctx.shadowColor = 'rgba(15,23,42,0.15)';
             ctx.shadowBlur = 12;
-            ctx.beginPath(); ctx.arc(supplyX, supplyY, 10, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath();
+            ctx.arc(supplyX, supplyY, 10, 0, Math.PI * 2);
+            ctx.fill();
             ctx.shadowBlur = 0;
             ctx.fillStyle = '#ffffff';
             ctx.font = 'bold 12px sans-serif';
@@ -309,7 +399,9 @@
 
             // 圆心
             ctx.fillStyle = '#94a3b8';
-            ctx.beginPath(); ctx.arc(cx, cy + offsetY, 4, 0, Math.PI * 2); ctx.fill();
+            ctx.beginPath();
+            ctx.arc(cx, cy + offsetY, 4, 0, Math.PI * 2);
+            ctx.fill();
 
             const deg = Math.round((angle * 180 / Math.PI) % 360);
             angleDisplay.textContent = `${deg}°`;
@@ -346,9 +438,15 @@
             draw();
         }
 
-        elasticSlider.addEventListener('input', function() { elasticValue.textContent = this.value; });
-        policySlider.addEventListener('input', function() { policyValue.textContent = this.value; });
-        speedSlider.addEventListener('input', function() { speedValue.textContent = this.value; });
+        elasticSlider.addEventListener('input', function() {
+            elasticValue.textContent = this.value;
+        });
+        policySlider.addEventListener('input', function() {
+            policyValue.textContent = this.value;
+        });
+        speedSlider.addEventListener('input', function() {
+            speedValue.textContent = this.value;
+        });
 
         toggleBtn.addEventListener('click', toggleRun);
         resetBtn.addEventListener('click', resetAll);
