@@ -76,7 +76,22 @@
             color: #4f46e5;
         }
 
-        /* ===== 横向卡片区 ===== */
+        /* ===== 卡片入场动画 ===== */
+        .card {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+        .card:nth-child(1) { animation-delay: 0.1s; }
+        .card:nth-child(2) { animation-delay: 0.2s; }
+        .card:nth-child(3) { animation-delay: 0.3s; }
+        .card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== 卡片样式 ===== */
         .cards {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -95,6 +110,8 @@
             color: inherit;
             display: flex;
             flex-direction: column;
+            /* 确保点击反馈在动画之上 */
+            will-change: transform;
         }
 
         .card:hover {
@@ -102,6 +119,12 @@
             border-color: #4f46e5;
             transform: translateY(-4px);
             box-shadow: 0 12px 28px rgba(79, 70, 229, 0.10);
+        }
+
+        /* ===== 点击反馈（按压缩放） ===== */
+        .card:active {
+            transform: scale(0.96);
+            transition: transform 0.1s;
         }
 
         .card .icon {
@@ -218,7 +241,7 @@
     <div class="cards">
 
         <!-- 数学 -->
-        <a href="#" class="card" id="cardMath">
+        <a href="math/index.html" class="card" id="cardMath">
             <div class="icon">📐</div>
             <h3>数学思维</h3>
             <div class="desc">鸡兔同笼 · 静态平衡<br>两个变量互相约束</div>
@@ -227,7 +250,7 @@
         </a>
 
         <!-- 经济 -->
-        <a href="#" class="card" id="cardEcon">
+        <a href="econ/index.html" class="card" id="cardEcon">
             <div class="icon">📈</div>
             <h3>经济思维</h3>
             <div class="desc">供给需求 · 动态波动<br>市场在圈上运行</div>
@@ -236,7 +259,7 @@
         </a>
 
         <!-- AI -->
-        <a href="#" class="card" id="cardAI">
+        <a href="ai/index.html" class="card" id="cardAI">
             <div class="icon">🤖</div>
             <h3>AI思维</h3>
             <div class="desc">人机交互 · 反馈循环<br>信息输入→输出</div>
@@ -245,7 +268,7 @@
         </a>
 
         <!-- 语言 -->
-        <a href="#" class="card" id="cardLingua">
+        <a href="lingua/index.html" class="card" id="cardLingua">
             <div class="icon">🌐</div>
             <h3>语言思维</h3>
             <div class="desc">马来/印尼/英语对照<br>用结构拆解语言</div>
@@ -271,13 +294,18 @@
 
 </div>
 
-<!-- ===== 交互演示 ===== -->
+<!-- ===== 交互脚本 ===== -->
 <script>
     document.querySelectorAll('.card').forEach(card => {
         card.addEventListener('click', function(e) {
-            e.preventDefault();
-            const title = this.querySelector('h3')?.textContent || '模块';
-            alert(`🔜 「${title}」页面正在建设中\n\n当前版本：首页已完成\n下一版本：按 P0 → P1 顺序推进`);
+            // 如果卡片链接指向真实页面，允许跳转
+            // 但我们增加一个轻微的按压反馈效果
+            this.style.transition = 'transform 0.1s';
+            this.style.transform = 'scale(0.96)';
+            setTimeout(() => {
+                this.style.transform = 'scale(1)';
+            }, 100);
+            // 注意：链接会正常跳转，不阻止默认行为
         });
     });
 </script>
